@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PostinganResource extends JsonResource
+class PostsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +18,14 @@ class PostinganResource extends JsonResource
         return [
             'id' => $this->id,
             'post_title' => $this->post_title,
-            'brand' => $this->brand,
-            'platform' => $this->platform,
+            'brand' => [
+                'id' => $this->brand->id,
+                'name'=> $this->brand->name,
+            ],
+            'platform' => [
+                'id'=> $this->platform->id,
+                'name'=> $this->platform->name,
+            ],
             'due_date' => $this->due_date,
             'payment' => $this->payment,
             'status' => $this->status,
