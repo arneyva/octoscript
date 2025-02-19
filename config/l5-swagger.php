@@ -216,7 +216,7 @@ return [
                 ],
                 */
             ],
-            'security' => [
+        'security' => [
                 /*
                  * Examples of Securities
                  */

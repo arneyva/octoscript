@@ -65,13 +65,69 @@
                 ]
             }
         },
-        "/api/postingan": {
+        "/api/brand": {
+            "get": {
+                "tags": [
+                    "brand"
+                ],
+                "summary": "Get all brands",
+                "operationId": "76211de82e95840a4a1518fb698094b7",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/posts": {
             "get": {
                 "tags": [
                     "Posts"
                 ],
                 "summary": "Get all postingan",
-                "operationId": "e5e56b19c95aa9a424e328edb9fce9b4",
+                "operationId": "c33f8cd4cd4e95a5f32c20cf333078a2",
+                "parameters": [
+                    {
+                        "name": "brand_id",
+                        "in": "query",
+                        "description": "Filter by brand ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "platform_id",
+                        "in": "query",
+                        "description": "Filter by platform ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "approved",
+                                "rejected"
+                            ]
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -105,6 +161,10 @@
         {
             "name": "Posts",
             "description": "Endpoints for managing posts"
+        },
+        {
+            "name": "brand",
+            "description": "brand"
         }
     ]
 }

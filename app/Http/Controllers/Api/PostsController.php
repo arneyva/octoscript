@@ -16,12 +16,33 @@ class PostsController extends ApiController
 {
     /**
      * @OA\Get(
-     *     path="/api/postingan",
+     *     path="/api/posts",
      *     summary="Get all postingan",
      *     tags={"Posts"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(response="200", description="Successful operation"),
-     *     @OA\Response(response="401", description="Unauthorized")
+     *     @OA\Response(response="401", description="Unauthorized"),
+     *  *     @OA\Parameter(
+ *         name="brand_id",
+ *         in="query",
+ *         description="Filter by brand ID",
+ *         required=false,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Parameter(
+ *         name="platform_id",
+ *         in="query",
+ *         description="Filter by platform ID",
+ *         required=false,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Parameter(
+ *         name="status",
+ *         in="query",
+ *         description="Filter by status",
+ *         required=false,
+ *         @OA\Schema(type="string", enum={"pending", "approved", "rejected"})
+ *     ),
      * )
      */
     public function index(Request $request)

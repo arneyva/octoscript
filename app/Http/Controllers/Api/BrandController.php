@@ -18,8 +18,18 @@ class BrandController extends ApiController
 {
     
     /**
-     * Display a listing of the resource.
-     */
+ * @OA\Get(
+ *     path="/api/brand",
+ *     summary="Get all brands",
+ *     tags={"brand"},
+ *     security={{"bearerAuth":{}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *     ),
+ *     @OA\Response(response=401, description="Unauthorized"),
+ * )
+ */
     public function index(Request $request)
     {
         $brand = Brand::query()->paginate($request->query('limit') ?? 10);
