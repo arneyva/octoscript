@@ -39,17 +39,16 @@ class AuthController extends ApiController
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        $user = User::where('email', $request->email )->first();
+        if (! $user || !Hash::check($request->password, $user->password)) {
+            return $this->errorResponse('User or password invalid');
         }
+        $user->tokens()->delete();
+        $token = $user->createToken('my-app-token', ['*'], now()->addHours(1))->plainTextToken;
+        return $this->successResponse([
+            'token' => $token,
+        ]);
 
-        $token = $user->createToken('my-app-token')->plainTextToken;
-
-        return response()->json(['token' => $token], 200);
     }
 
     /**
@@ -65,6 +64,8 @@ class AuthController extends ApiController
     {
         $request->user()->tokens()->delete();
 
-        return response()->json(['message' => 'You have been successfully logged out.'], 200);
+        return $this->successResponse([
+            'status' => 'Successfully logged out',
+        ]);
     }
 }

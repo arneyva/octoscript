@@ -19,12 +19,12 @@ class PostinganSeeder extends Seeder
         // Membuat 10 data dummy untuk tabel posts
         foreach (range(1, 10) as $index) {
             DB::table('postingan')->insert([
-                'post_title' => $faker->sentence,
-                'brand' => $faker->company,
-                'platform' => $faker->word,
+                'post_title' => $faker->sentence, // Kalimat dalam bahasa Indonesia
+                'brand' => $faker->randomElement(['Nike', 'Adidas', 'Puma', 'Reebok']),
+                'platform' => $faker->randomElement(['Instagram', 'Twitter', 'Facebook']),
                 'due_date' => $faker->date(),
-                'payment' => $faker->randomFloat(2, 1000, 10000), // Angka acak dengan 2 desimal
-                'status' => $faker->numberBetween(0, 2), // Status antara 0 dan 2
+                'payment' => $faker->numberBetween(1000, 10000), // Tanpa koma
+                'status' => $faker->randomElement(['draft', 'published', 'archived']), // ENUM
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\PostinganResource;
 use App\Models\Postingan;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * @OA\Tag(
@@ -24,8 +25,11 @@ class PostinganController extends ApiController
      *     @OA\Response(response="401", description="Unauthorized")
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        return PostinganResource::collection(Postingan::all());
+        $postingan = Postingan::query()
+        ->filters($request->query()) // Panggil scopeFilters()
+        ->paginate($request->query('limit') ?? 10);
+            return $this->successResponse(PostinganResource::paginate($postingan));
     }
 }
