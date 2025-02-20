@@ -68,7 +68,7 @@
         "/api/brand": {
             "get": {
                 "tags": [
-                    "brand"
+                    "Brands"
                 ],
                 "summary": "Get all brands",
                 "operationId": "76211de82e95840a4a1518fb698094b7",
@@ -85,6 +85,42 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/brand/store": {
+            "post": {
+                "tags": [
+                    "Brands"
+                ],
+                "summary": "Create a new brand",
+                "operationId": "03ab10b2f2f2b1cf6efee0a0d7d479c0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "BrandName"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Brand created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
             }
         },
         "/api/posts": {
@@ -159,12 +195,12 @@
             "description": "Endpoints for user authentication"
         },
         {
-            "name": "Posts",
-            "description": "Endpoints for managing posts"
+            "name": "Brands",
+            "description": "Endpoints for Brands"
         },
         {
-            "name": "brand",
-            "description": "brand"
+            "name": "Posts",
+            "description": "Endpoints for managing posts"
         }
     ]
 }

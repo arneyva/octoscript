@@ -8,6 +8,9 @@ use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 /**
  * @OA\Tag(
  *     name="Brands",
@@ -16,41 +19,57 @@ use Exception;
  */
 class BrandController extends ApiController
 {
-    
+
     /**
- * @OA\Get(
- *     path="/api/brand",
- *     summary="Get all brands",
- *     tags={"brand"},
- *     security={{"bearerAuth":{}}},
- *     @OA\Response(
- *         response=200,
- *         description="Successful operation",
- *     ),
- *     @OA\Response(response=401, description="Unauthorized"),
- * )
- */
+     * @OA\Get(
+     *     path="/api/brand",
+     *     summary="Get all brands",
+     *     tags={"Brands"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     * )
+     */
     public function index(Request $request)
     {
         $brand = Brand::query()->paginate($request->query('limit') ?? 10);
-        return $this->successResponse(BrandResource::paginate( $brand));
+        return $this->successResponse(BrandResource::paginate($brand));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/brand/store",
+     *     summary="Create a new brand",
+     *     tags={"Brands"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *            @OA\Property(property="name", type="string", example="BrandName")
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Brand created successfully"),
+     *     @OA\Response(response="401", description="Unauthorized")
+     * )
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|unique:brands'
         ]);
+
+        if ($validator->fails()) {
+            return self::errorValidation($validator->errors()->toArray());
+        }
         try {
             DB::beginTransaction();
             $brand = Brand::create([
-                'name' => $validated['name'],
+                'name' => $request->name,
             ]);
             DB::commit();
-
             return $this->successResponse(new BrandResource($brand));
         } catch (Exception $e) {
             DB::rollBack();
@@ -77,8 +96,14 @@ class BrandController extends ApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        try {
+            $brand = Brand::findOrFail($id);
+            $brand->delete();
+            return $this->successResponse(null, 'Brand deleted successfully');
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse('Brand not found', 404);
+        }
     }
 }

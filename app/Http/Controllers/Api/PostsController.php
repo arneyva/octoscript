@@ -48,7 +48,7 @@ class PostsController extends ApiController
     public function index(Request $request)
     {
         $posts = Posts::query()
-        ->filters($request->query()) // Panggil scopeFilters()
+        ->filters($request->query())
         ->paginate($request->query('limit') ?? 10);
             return $this->successResponse(PostsResource::paginate($posts));
     }

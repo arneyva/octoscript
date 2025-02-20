@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // $middleware->redirectGuestsTo('/loginbajingan');
      
         // Using a closure...
-        $middleware->redirectGuestsTo(fn (Request $request) => route('loginbajingan'));
+        $middleware->redirectGuestsTo(fn (Request $request) => route('login'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
