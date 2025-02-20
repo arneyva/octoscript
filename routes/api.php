@@ -13,17 +13,20 @@ Route::post('/login', [AuthController::class, 'generateToken'])->name('login');
 // Protected routes
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('/brand')->group(function () {
-        Route::get('', [BrandController::class, 'index' ]);
-        Route::post('/store', [BrandController::class, 'store' ]);
-        Route::delete('/{id}', [BrandController::class, 'destroy' ]);
+        Route::get('', [BrandController::class, 'index']);
+        Route::post('/store', [BrandController::class, 'store']);
+        Route::delete('/{id}', [BrandController::class, 'destroy']);
+        Route::put('/{id}', [BrandController::class, 'update']);
     });
     Route::prefix('/platform')->group(function () {
-        Route::get('', [PlatformController::class, 'index' ]);
-        Route::post('/store', [PlatformController::class, 'store' ]);
+        Route::get('', [PlatformController::class, 'index']);
+        Route::post('/store', [PlatformController::class, 'store']);
+        Route::delete('/{id}', [PlatformController::class, 'destroy']);
+        Route::put('/{id}', [PlatformController::class, 'update']);
     });
     Route::prefix('/posts')->group(function () {
-        Route::get('', [PostsController::class, 'index' ]);
-        Route::post('/store', [PostsController::class, 'store' ]);
+        Route::get('', [PostsController::class, 'index']);
+        Route::post('/store', [PostsController::class, 'store']);
     });
     Route::post('/logout', [AuthController::class, 'logout']);
 });

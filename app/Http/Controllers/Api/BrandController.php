@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\Rule;
+
 
 /**
  * @OA\Tag(
@@ -76,23 +78,33 @@ class BrandController extends ApiController
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $brand = Brand::findOrFail($id);
+            $request->validate([
+                'name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('brands', 'name')->ignore($brand->id), // Pastikan name unik kecuali untuk brand saat ini
+                ],
+            ]);
+            $brand->update([
+                'name' => $request->input('name'),
+            ]);
+            return $this->successResponse($brand, 'Brand updated successfully');
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse('Brand not found', 404);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->errorValidation($e->errors(), 'Validation error');
+        } catch (Exception $e) {
+            return $this->errorResponse('Something went wrong', 500);
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      */
