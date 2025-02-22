@@ -28,6 +28,28 @@ class PlatformController extends ApiController
         $platform = Platform::query()->paginate($request->query('limit') ?? 10);
         return $this->successResponse(PlatformResource::paginate($platform));
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/platform/store",
+     *     summary="Create a new platform",
+     *     tags={"Platforms"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="New Platform")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Platform created successfully",
+     *     ),
+     *     @OA\Response(response=400, description="Validation error"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
+     */
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -49,8 +71,30 @@ class PlatformController extends ApiController
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
+
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/platform/{id}",
+     *     summary="Update an existing platform",
+     *     tags={"Platforms"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name"},
+     *             @OA\Property(property="name", type="string", example="Updated Platform Name")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Platform updated successfully"),
+     *     @OA\Response(response=400, description="Validation error"),
+     *     @OA\Response(response=404, description="Platform not found"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -76,8 +120,22 @@ class PlatformController extends ApiController
             return $this->errorResponse('Something went wrong', 500);
         }
     }
+
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/platform/{id}",
+     *     summary="Delete a platform",
+     *     tags={"Platforms"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Platform deleted successfully"),
+     *     @OA\Response(response=404, description="Platform not found"),
+     *     @OA\Response(response=500, description="Internal server error")
+     * )
      */
     public function destroy($id)
     {

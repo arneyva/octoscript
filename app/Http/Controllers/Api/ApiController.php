@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 
 /**
  * @OA\Info(
- *     title="Nama API Kamu",
+ *     title="Octroscript",
  *     version="1.0.0"
  * )
  *
